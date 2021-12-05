@@ -6,6 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.web3j.ens.EnsResolver;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.http.HttpService;
+
+import java.io.IOException;
+
 import geth.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void outputData(View w) {
+    public void outputData(View w) throws IOException {
         try {
             System.out.println("Peersize: "+node.getPeersInfo().size());
             textView.setText("Peersize: " + node.getPeersInfo().size() + "\n");
@@ -53,5 +59,25 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545"));
+                try {
+                    EnsResolver ensResolver = new EnsResolver(web3j);
+                    System.out.println("Get Blocknumber from node: " + web3j.ethBlockNumber().send().getBlockNumber().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(run).start();
     }
+
+
 }
