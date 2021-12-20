@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import org.web3j.ens.EnsResolver;
+import org.ephone.testgeth.EnsResolver;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     EnsResolver ensResolver = new EnsResolver(web3j);
                     System.out.println("Get Blocknumber from node: " + web3j.ethBlockNumber().send().getBlockNumber().toString());
+                    System.out.println("Get ENS Address: " + ensResolver.resolve("mhaas.eth"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
